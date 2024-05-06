@@ -1,0 +1,48 @@
+body {
+    margin-top: 30px ;
+    background-color: #e7beed; 
+    font-family: monospace;
+    text-align: center;
+}
+#game-title{
+    margin-top: 20px;
+}
+
+section {
+    text-align: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid black;
+    width: 400px;
+    margin: auto;
+    background-color: #fff;
+    margin-top: 75px;
+}
+
+#board {
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, 100px); /* specifies width of cell's row*/
+    grid-template-rows: repeat(3, 100px); /* specifies height of cell's row*/
+    gap: 2px;
+    margin-top: 20px;
+}
+.cell {
+    font-size: 50px;
+    font-family: monospace ;
+    border: 1px solid #000000;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#message {
+    margin-top: 50px;
+    font-size: larger;
+}
+#restart
+{
+    margin-bottom: 20px;
+}
+
