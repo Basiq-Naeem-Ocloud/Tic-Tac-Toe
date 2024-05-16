@@ -1,28 +1,64 @@
-const cells = document.querySelectorAll('.cell');
-const message = document.getElementById('message');
-const restart = document.getElementById('restart');
-let currentPlayer = 'X';
-let gameActive = true;
-let board = ['', '', '', '', '', '', '', '', '']; //initializing board array
-const turnMessage = document.getElementById('player-turn'); //keeping track of players turn
-turnMessage.textContent = `${currentPlayer}'s turn` ;
+const cells: NodeListOf<HTMLDivElement> = document.querySelectorAll('.cell');
 
-function cellClicked(cellIndex)
+const message: HTMLElement | null = document.getElementById('message');
+
+const restart: HTMLElement | null = document.getElementById('restart');
+
+let currentPlayer: string;
+
+let gameActive: boolean;
+
+let board: string[] = ['', '', '', '', '', '', '', '', ''];
+
+const turnMessage: HTMLElement | null = document.getElementById('player-turn');
+
+
+// Function to reset game state variables
+function resetGameState(): void 
 {
-    if (board[cellIndex] === '' && gameActive) {
-        board[cellIndex] = currentPlayer;
-        document.getElementsByClassName('cell')[cellIndex].innerHTML= currentPlayer
-        // cell.textContent = currentPlayer;
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        turnMessage.textContent = `${currentPlayer}'s turn` ;
-        checkWinner();
+    currentPlayer = 'X';
+    gameActive = true;
+    board = ['', '', '', '', '', '', '', '', ''];
 
+    if (turnMessage) 
+    {
+        turnMessage.textContent = `${currentPlayer}'s turn`;
+    }
+
+    // Clear messages
+    if (message) {
+        message.textContent = '';
     }
 }
 
 
-function checkWinner() {
-    const winningConditions = [
+resetGameState();
+
+function cellClicked(cellIndex: number): void 
+{
+    if (board[cellIndex] === '' && gameActive) 
+    {
+        board[cellIndex] = currentPlayer;
+
+        const cell = document.getElementsByClassName('cell')[cellIndex] as HTMLDivElement;
+
+        cell.innerHTML = currentPlayer;
+
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+
+        if (turnMessage)
+        {
+            turnMessage.textContent = `${currentPlayer}'s turn`;
+        }
+
+        checkWinner();
+    }
+}
+
+function checkWinner(): void {
+
+    const winningConditions: number[][] = 
+    [
         [0, 1, 2],
         [3, 4, 5],
         [6, 7, 8],
@@ -33,35 +69,50 @@ function checkWinner() {
         [2, 4, 6]
     ];
 
-    for (let condition of winningConditions) {
+    for (const condition of winningConditions) 
+    {
         const [a, b, c] = condition;
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) 
+        {
             gameActive = false;
-            turnMessage.textContent = ' ' ;
-            message.textContent = `${board[a]} wins! 🎉`;
+            
+            if (turnMessage) {
+                turnMessage.textContent = '';
+            }
+            if (message) {
+                message.textContent = `${board[a]} wins! 🎉`;
+            }
             return;
         }
     }
 
     if (!board.includes('')) {
         gameActive = false;
-        turnMessage.textContent = ' ';
-        message.textContent = "It's a tie!";
+        if (turnMessage) {
+            turnMessage.textContent = '';
+        }
+        if (message) {
+            message.textContent = "It's a tie!";
+        }
     }
 }
 
-function restartGame() {
+function restartGame(): void {
     cells.forEach(cell => {
         cell.textContent = '';
     });
-    // Reset game state variables
-    currentPlayer = 'X';
-    gameActive = true;
-    board = ['', '', '', '', '', '', '', '', ''];
 
+    // Reset game state variables using the resetGameState function
+    resetGameState();
 
-    message.textContent = '';
-    turnMessage.textContent = `${currentPlayer}'s turn` ;
 }
 
-restart.addEventListener('click', restartGame);
+if (restart) {
+    restart.addEventListener('click', restartGame);
+}
+
+cells.forEach((cell :HTMLElement, index :number) :void => {
+    cell.addEventListener('click', () => cellClicked(index));
+});
+
